@@ -1,0 +1,23 @@
+#logo {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 32px;
+    top: -25px;
+}
+#logo .sublogo {
+    font-size: 12px;
+    margin-top: -7px;
+}
+
+body{
+    margin-top: 100px;
+}
+
+
+@media only screen and (max-width: 480px) {
+    #logo {
+        font-size: 24px;
+    }
+    #logo .sublogo {
+        display: none;
+    }
+}

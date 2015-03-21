@@ -1,38 +1,68 @@
-/**
- * Created by padam on 3/15/15.
- */
 var gulp = require('gulp');
 var webserver = require('gulp-webserver');
-var mainBowerFile = require('main-bower-files');
+var mainBowerFiles = require('main-bower-files');
 var inject = require('gulp-inject');
+var del = require('del');
+var angularFileSort = require('gulp-angular-filesort');
 
-var paths ={
+var paths = {
     temp: 'temp',
     tempVendor: 'temp/vendor',
-    index: 'app/index.html'
-}
+    tempIndex: 'temp/index.html',
 
-gulp.task('default', ['scripts', 'serve']);
+    index: 'app/index.html',
+    appSrc: 'app/**/*',
+    bowerSrc: 'bower_components/**/*'
+};
 
-gulp.task('scripts', function(){
+gulp.task('default', ['watch']);
 
-    var tempIndex = gulp.src(paths.index).pipe(gulp.dest(paths.temp));
-
-    var scripts = gulp.src('app/**/*').pipe(gulp.dest(paths.temp));
-
-    var tempVendors = gulp.src(mainBowerFile()).pipe(gulp.dest(paths.tempVendor));
-
-    tempIndex.pipe(inject(scripts, { relative: true }))
-        .pipe(inject(tempVendors, { relative: true, name: 'vendorInject' }))
-        .pipe(gulp.dest(paths.temp));
-
+gulp.task('watch', ['serve'], function () {
+    gulp.watch(paths.appSrc, ['scripts']);
+    gulp.watch(paths.bowerSrc, ['vendors']);
 });
 
-gulp.task('serve', function(){
-    gulp.src(paths.temp)
+gulp.task('serve', ['vendors'], function () {
+    return gulp.src(paths.temp)
         .pipe(webserver({
-            open: true
+            livereload: true,
+            proxies: [{ source: '/user', target: 'http://localhost:1337/user' }]
         }));
 });
 
+gulp.task('vendors', ['copyVendor', 'scripts'], function () {
 
+    var tempVendors = gulp.src(paths.tempVendor + '/**/*.js').pipe(angularFileSort());
+
+    return gulp.src(paths.tempIndex)
+        .pipe(inject(tempVendors, {
+            relative: true,
+            name: 'vendorInject'
+        }))
+        .pipe(gulp.dest(paths.temp));
+});
+
+gulp.task('copyVendor', function () {
+    return gulp.src(mainBowerFiles()).pipe(gulp.dest(paths.tempVendor));
+});
+
+gulp.task('scripts', ['copyApp'], function () {
+
+    var appFiles = gulp.src('temp/*', {
+        read: false
+    });
+
+    return gulp.src(paths.tempIndex)
+        .pipe(inject(appFiles, {
+            relative: true
+        }))
+        .pipe(gulp.dest(paths.temp));
+});
+
+gulp.task('copyApp', function () {
+    return gulp.src(paths.appSrc).pipe(gulp.dest(paths.temp));
+})
+
+gulp.task('clean', function (cb) {
+    del([paths.temp], cb);
+});

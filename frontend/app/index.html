@@ -1,14 +1,74 @@
-<!DOCTYPE html>
 <html ng-app="app">
 <head>
-    <title>My Index</title>
+    <title>My Index1</title>
+    <link rel="stylesheet" href="vendor/bootstrap.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="site.css">
 </head>
 <body>
-<h1>Home</h1>
+<!--=== Top ===-->
+<div id="top">
+    <div class="container">
+    </div>
+</div>
+<!--/top-->
+
+<!--=== Header ===-->
+<header id="header" role="banner">
+    <div class="container">
+        <div id="navbar" class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/#/">Platinum Services</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#main-slider"><i class="icon-home"></i>Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#about-us">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!--/#header-->
+
+<section id="body" class="container" ng-controller="mainController">
+
+    <div class="container" ng-view=""></div>
+
+</section>
+
+<hr/>
+
+<!--=== copyright ===-->
+<div class="copyright">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8">
+                <p>2015 &copy; PSS. ALL Rights Reserved.</p>
+            </div>
+        </div>
+        <!--/row-->
+
+    </div>
+    <!--/container-->
+</div>
+<!--/copyright-->
+
 <!-- vendorInject:js -->
 <!-- endinject -->
 
 <!-- inject:js -->
 <!-- endinject -->
+<script src="scripts/controllers/main.js"></script>
 </body>
 </html>
